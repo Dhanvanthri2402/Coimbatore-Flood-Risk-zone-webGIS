@@ -24,11 +24,9 @@
 [cite_start]To handle the massive spatial joins without memory exhaustion, the following indexing and intersection logic was executed on the backend[cite: 159]:
 
 ```sql
--- GiST Indexing for rapid spatial querying
 CREATE INDEX idx_coimbatore_buildings_geom ON coimbatore_buildings USING GIST(geom);
 CREATE INDEX idx_coimbatore_dem_rast ON coimbatore_dem USING GIST(rast);
 
--- Spatial Intersection to calculate precise ground elevation from raster pixels
 UPDATE coimbatore_buildings
 SET ground_elevation = ST_Value(
     coimbatore_dem.rast,
