@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coimbatore Flood Risk Analysis | WebGIS</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root { --primary-green: #2d5a27; --light-green: #e8f5e9; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; height: 100vh; }
+        header { background-color: var(--primary-green); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1001; }
+        #main-container { display: flex; flex: 1; overflow: hidden; }
+        #sidebar { width: 300px; background-color: var(--light-green); padding: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.1); z-index: 1000; }
+        #map { flex: 1; }
+        .legend-item { display: flex; align-items: center; margin-bottom: 10px; }
+        .color-box { width: 20px; height: 20px; margin-right: 10px; border-radius: 3px; border: 1px solid #666; }
+        h2 { font-size: 1.2rem; margin-top: 0; color: var(--primary-green); }
+        .stats { background: white; padding: 10px; border-radius: 5px; margin-top: 20px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <div style="font-size: 1.4rem; font-weight: bold;">Coimbatore Flood Risk Mapping</div>
+        <div style="font-size: 0.9rem;">PG Project: DHANVANTHRI S</div>
+    </header>
+    <div id="main-container">
+        <div id="sidebar">
+            <h2>Risk Assessment</h2>
+            <p>Spatial analysis of 146,000+ building structures based on elevation and flood plain proximity.</p>
+            <div class="legend-item"><div class="color-box" style="background: #ff0000;"></div> <span>High Risk Zone</span></div>
+            <div class="legend-item"><div class="color-box" style="background: #2ecc71;"></div> <span>Safe Zone</span></div>
+            <div class="stats"><strong>System Status:</strong><br>Backend: PostGIS<br>Middleware: GeoServer 2.28<br>Frontend: Leaflet.js</div>
+        </div>
+        <div id="map"></div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([11.0168, 76.9558], 13);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: 'OpenStreetMap'
+        }).addTo(map);
+        var riskLayer = L.tileLayer.wms("http://localhost:8080/geoserver/cbe_flood/wms", {
+            layers: 'cbe_flood:cbe_buildings',
+            format: 'image/png',
+            transparent: true,
+            version: '1.1.1'
+        }).addTo(map);
+    </script>
+</body>
+</html>
